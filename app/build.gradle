@@ -24,13 +24,13 @@ android {
     compileSdkVersion 26
     defaultConfig {
         if (buildAsApplication) {
-            applicationId "org.etlegacy.app"
+            applicationId "org.etlegacy.app" // eigenen downloader Platz suchen .... 
         }
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 26 // Dev Note für sdk build 
         versionCode 1
         versionName versionberg.name
-        setProperty("archivesBaseName", "etlegacy-v$versionName")
+        setProperty("archivesBaseName", "etlegacy-v$versionName") // umändern wichtig
         externalNativeBuild {
             cmake {
                 arguments "-DCROSS_COMPILE32=OFF", "-DFEATURE_RENDERER_GLES=ON", "-DBUILD_SERVER=OFF", "-DINSTALL_EXTRA=OFF","-DARM=ON" , "-DCMAKE_BUILD_TYPE=Release", "-DBUNDLED_LIBS=OFF", "-DFEATURE_LUA=OFF", "-DFEATURE_OPENAL=OFF", "-DRENDERER_DYNAMIC=OFF", "-DFEATURE_FREETYPE=OFF", "-DFEATURE_THEORA=OFF", "-DFEATURE_SSL=OFF"
@@ -40,11 +40,12 @@ android {
         ndk {
             // Specifies the ABI configurations of your native
             // libraries Gradle should build and package with your APK.
+            // Dev Note = Manifest arm64-v8a Austauschen für UniversalBuild
             abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-// need chanche
+// need chance = Alter ET Key Generator verwenden statts etlegacy Key - könnte auf Wolffile liegen
     signingConfigs {
         debug {
             storeFile file('../etlkey.jks')
@@ -67,7 +68,7 @@ android {
         }
         externalNativeBuild {
             cmake {
-                path '../etlegacy/CMakeLists.txt'
+                path '../etlegacy/CMakeLists.txt' /// Neubauen 
             }
         }
 
@@ -81,14 +82,14 @@ android {
             variant.outputs.each { output ->
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith(".aar")) {
-                    def fileName = "org.etlegacy.app.aar";
+                    def fileName = "org.etlegacy.app.aar"; // Noch ausdenken
                     output.outputFile = new File(outputFile.parent, fileName);
                 }
             }
         }
     }
 }
-// wechseln
+// wechseln , am besten ganz raus oder für Trackball gaming mäuse drinne lassen
 dependencies {
     api 'com.github.erz05:JoyStick:1.1.0' // trash
     implementation 'com.loopj.android:android-async-http:1.4.10'
