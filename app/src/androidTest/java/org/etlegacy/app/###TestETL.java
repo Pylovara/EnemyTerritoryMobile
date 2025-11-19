@@ -1,5 +1,5 @@
 // Neubauen wenn ich die Software Auswahl getroffen hab ...
-
+// Pfad wird geändert ab etlegacy - /etlegacy/app/###TestETL.java
 
 
 
