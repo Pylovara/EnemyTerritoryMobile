@@ -1,0 +1,3 @@
+placeholder
+
+info for sdk build : ic_launcher.png     name
