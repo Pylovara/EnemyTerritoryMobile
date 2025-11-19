@@ -1,3 +1,9 @@
+// Neubauen wenn ich die Software Auswahl getroffen hab ...
+
+
+
+
+
 package org.etlegacy.app;
 
 import android.app.Application;
@@ -47,6 +53,8 @@ public class TestETL {
         // Perform click on Nickname Entry
         // TODO: Implement
 
+
+        // Dev Note = Falsche quelle , später .. 
         assertEquals("org.etlegacy.app", app.getPackageName());
         DisplayMetrics displaymetrics = new DisplayMetrics();
 
