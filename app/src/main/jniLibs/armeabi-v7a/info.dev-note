@@ -1,0 +1,37 @@
+libSDL2.so
+
+Die libSDL2.so (Simple DirectMedia Layer, Version 2) ist :
+eine plattformübergreifende Entwicklungsbibliothek, die Low-Level-Zugriff auf Audio, Tastatur, Maus, Joystick, Grafik-Hardware 
+(via OpenGL/Vulkan/Direct3D), und Threading bietet.
+Die tatsächlichen Abhängigkeiten der libSDL2.so sind dynamisch und stark vom Betriebssystem 
+(insbesondere Linux-Distribution und -Version), der Architektur (z. B. x86_64, i386) und den aktivierten Funktionalitäten 
+beim Kompilieren der Bibliothek abhängig.
+
+Kern-Abhängigkeiten (Typische Basis)
+Damit libSDL2.so überhaupt funktioniert, benötigt sie typischerweise grundlegende Systembibliotheken:
+ * Standard-C-Bibliothek (libc): Unverzichtbar für fast jedes Programm und jede Bibliothek, 
+    um grundlegende Funktionen (Speicherverwaltung, Dateizugriff, etc.) bereitzustellen, meist repräsentiert durch libc.so.6.
+
+ * Mathematische Bibliothek: Für mathematische Operationen, meist libm.so.6.
+ * Dynamischer Linker: Das Ladeprogramm selbst, das zur Laufzeit alle Bibliotheken auflöst.
+
+   
+Betriebssystem- und Hardware-Abhängigkeiten
+Um auf die eigentliche Hardware zuzugreifen, hängt SDL2 von den jeweiligen Subsystemen des Betriebssystems ab:
+| Subsystem         | Typische Abhängigkeiten (Linux)                                           | Funktion 
+| Video/Grafik      | libX11, libXext, libGL (für OpenGL), libvulkan.so.1 (optional für Vulkan) | Fensterverwaltung, 2D/3D-Rendering. 
+| Audio             | libasound (ALSA), libpulse (PulseAudio), libjack, libsndio                | Audio-Ein- und -Ausgabe. Oftmals zieht libpulse weitere Audio-Libs nach sich. |
+| Eingabegeräte     | libudev, libdbus                                                          | Erkennung und Verwaltung von Eingabegeräten (Tastatur, Maus, Gamepads). |
+| Threading/System  | libpthread                                                                | Verwaltung von Threads. 
+  
+Optionale/Erweiterte Abhängigkeiten
+Einige Abhängigkeiten werden nur gezogen, wenn SDL2 mit bestimmten Funktionen kompiliert wurde oder wenn 
+zusätzliche SDL-Erweiterungsbibliotheken verwendet werden (die ihrerseits von libSDL2.so abhängen):
+ * zusätzliche SDL-Erweiterungen (z.B. libSDL2_image, libSDL2_ttf, libSDL2_mixer) sind abhängig von libSDL2.so. Diese Erweiterungen benötigen dann ihrerseits oft zusätzliche Bibliotheken, wie libjpeg, libpng, libfreetype, oder libogg/libflac/libvorbis für Audioformate.
+ * Wayland/XWayland: Abhängigkeiten von Wayland-Protokollbibliotheken, wenn ein nativer Wayland-Backend verwendet wird.
+
+Wie Sie die tatsächlichen Abhängigkeiten prüfen
+Da die exakten Abhängigkeiten auf Ihrem System variieren können, können Sie dies mit dem Kommandozeilen-Tool ldd 
+(List Dynamic Dependencies) überprüfen, wenn die Datei libSDL2.so (oder libSDL2-2.0.so.0) auf Ihrem System installiert ist:
+ldd /path/to/libSDL2.so
+# Beispiel: ldd /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
