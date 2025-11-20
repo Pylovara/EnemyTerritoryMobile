@@ -1,3 +1,27 @@
 #### Info
 
   Bereich säubern , libs anpassen , android 15+ 
+
+Technische Kompatibilität (Gerät)
+Moderne 64-Bit-Android-Geräte (mit arm64-v8a Architektur) unterstützen die Ausführung von Code im 32-Bit-Modus (armeabi-v7a).
+ * So funktioniert es: Wenn Ihre App ausschließlich 32-Bit-Bibliotheken enthält (z. B. nur im Ordner lib/armeabi-v7a des APK), startet der Android-Paketmanager den zugehörigen App-Prozess im 32-Bit-Modus. In diesem Modus kann der Prozess die 32-Bit-Libs fehlerfrei laden und verwenden.
+ * Wichtig: Wenn Sie jedoch für auch nur eine native Bibliothek (.so-Datei) eine 64-Bit-Version mitliefern (z. B. in lib/arm64-v8a), müssen Sie für alle anderen nativen Bibliotheken, die von dieser App verwendet werden, ebenfalls eine 64-Bit-Version bereitstellen. Andernfalls startet der Prozess im 64-Bit-Modus und kann die fehlenden 32-Bit-Libs nicht laden.
+
+Google Play Store-Anforderung
+Dies ist der kritische Punkt, wenn Sie Ihre App verbreiten möchten:
+Seit August 2019 verlangt Google Play, dass alle Apps, die native Bibliotheken (.so-Dateien) enthalten, parallel zur 32-Bit-Version 
+auch eine 64-Bit-Version (arm64-v8a) bereitstellen.
+
+ * Konsequenz: Eine App, die nur 32-Bit-Libs enthält, wird vom Google Play Store für 64-Bit-Geräte abgelehnt oder nicht bereitgestellt.
+ * Ausnahme: Apps, die keinen nativen Code verwenden (nur Java/Kotlin) oder nur 32-Bit-Geräte unterstützen, sind davon nicht betroffen.
+
+Zusammenfassung für Entwickler:
+| Szenario                             | Ergebnis auf 64-Bit-Gerät | Google Play Store | Empfehlung |
+| Nur 32-Bit-Libs (z. B. armeabi-v7a)  | Läuft in 32-Bit-Prozess. | Wird abgelehnt (seit 2019). | Nicht empfohlen. |
+| Nur 64-Bit-Libs (z. B. arm64-v8a)    | Läuft in 64-Bit-Prozess. | OK, aber nicht auf reinen 32-Bit-Geräten. | Nur, wenn Sie 32-Bit-Support ausschließen. |
+| 32-Bit und 64-Bit-Libs (Multilib)    | Läuft in 64-Bit-Prozess, nutzt die 64-Bit-Libs. | Erfüllt die Anforderung. | Standard und empfohlen. |
+
+
+Alternativ store Lösung die es nicht verlangen  :
+
+APKPure UpToDown APKoid etc 
