@@ -35,3 +35,43 @@ Da die exakten Abhängigkeiten auf Ihrem System variieren können, können Sie d
 (List Dynamic Dependencies) überprüfen, wenn die Datei libSDL2.so (oder libSDL2-2.0.so.0) auf Ihrem System installiert ist:
 ldd /path/to/libSDL2.so
 # Beispiel: ldd /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+libhidapi.so
+
+Die Bibliothek libhidapi.so ist Teil der HIDAPI (Human Interface Device API), einer multi-plattformfähigen Bibliothek 
+zur einfachen Kommunikation mit USB- und Bluetooth-HID-Klasse-Geräten (z. B. Tastaturen, Mäuse, Gamepads, aber auch proprietäre Sensoren und Controller).
+Da libhidapi.so ein Wrapper für die systemspezifischen HID-Zugriffsmethoden ist, sind ihre Abhängigkeiten sehr stark vom verwendeten Backend (Implementierung) 
+abhängig, das beim Kompilieren gewählt wurde.
+
+Abhängigkeitserklärung von libhidapi.so (Linux)
+Unter Linux existiert HIDAPI typischerweise in zwei separaten Bibliotheken, die verschiedene Kernel-Schnittstellen nutzen:
+1. libhidapi-libusb.so
+Dies ist das ältere und oft robustere Backend, das auf der libusb-Bibliothek basiert.
+ * Hauptabhängigkeit:
+   * libusb-1.0.so: Die primäre Bibliothek für Low-Level-Zugriff auf USB-Geräte.
+ * Zusätzliche Systemabhängigkeiten:
+   * libc.so.6 (Standard C-Bibliothek) <--- 2.60b relevant windows
+2. libhidapi-hidraw.so
+Dies ist das modernere Backend, das die hidraw-Schnittstelle des Linux-Kernels nutzt.
+ * Hauptabhängigkeiten:
+   * virtual/libudev oder libudev.so: Wird benötigt, um auf Geräteknoten (Device Nodes) zugreifen und deren Berechtigungen 
+verwalten zu können (Plug-and-Play-Funktionalität). Udev-Regeln (.rules Dateien) sind oft notwendig, um unprivilegierten Benutzern den Zugriff zu erlauben.
+ * Zusätzliche Systemabhängigkeiten:
+   * libc.so.6 (Standard C-Bibliothek)
+
+Wie Sie die korrekte Bibliotheksdatei finden
+Beim Linken gegen die allgemeine Bibliothek libhidapi.so (was oft nur ein symbolischer Link ist) wird zur Laufzeit auf Ihrem System entweder 
+libhidapi-libusb.so.0 oder libhidapi-hidraw.so.0 geladen.
+Um die genauen dynamischen Abhängigkeiten auf Ihrem System zu überprüfen, verwenden Sie erneut das Tool ldd für die tatsächliche Bibliotheksdatei 
+(die in der Regel eine Versionsnummer wie libhidapi-libusb.so.0 im Namen trägt):
+# Beispiel für libusb-Backend
+ldd /usr/lib/x86_64-linux-gnu/libhidapi-libusb.so.0
+
+ * Ergebnis (libusb-Backend): Sie sehen dort unter anderem einen Verweis auf libusb-1.0.so.0.
+ * Ergebnis (hidraw-Backend): Sie sehen dort unter anderem einen Verweis auf libudev.so.1.
+
+
+
+
